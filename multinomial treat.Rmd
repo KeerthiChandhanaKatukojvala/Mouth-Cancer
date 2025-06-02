@@ -1,0 +1,75 @@
+
+```{r}
+
+```
+
+```{r}
+
+
+
+```
+
+```{r}
+library(nnet)
+data <- read.csv("C:\\Users\\HP\\Downloads\\finally final dataset1.csv")
+head(data)
+
+data$preference <- as.factor(data$treatment)
+
+model <- multinom(data$treatment ~ data$size.cm.3  +data$Age, data = data)
+x=summary(model)
+x
+
+z <- x$coefficients/ x$standard.errors
+p_values <- 2 * (1 - pnorm(abs(z)))
+p_values
+
+```
+
+
+
+```{r}
+sum(duplicated(data))
+```
+
+```{r}
+library(car)
+
+# Create a linear model with both predictors
+lm_model <- lm(treatment ~ Age + size.cm.3, data = data)
+
+# Compute Variance Inflation Factors
+vif(lm_model)
+
+```
+
+
+```{r}
+library(tidyverse)
+
+# Convert treatment to numeric (for visual logit plotting)
+data$treatment <- as.numeric(data$treatment)
+
+# Plot relationship between predictors and treatment log-odds
+ggplot(data, aes(x = Age, y = treatment)) +
+  geom_point() + geom_smooth(method = "loess") +
+  ggtitle("Log-odds Approximation: Age vs. Treatment")
+
+ggplot(data, aes(x = size.cm.3, y = treatment)) +
+  geom_point() + geom_smooth(method = "loess") +
+  ggtitle("Log-odds Approximation: Tumor Size vs. Treatment")
+
+```
+```{r}
+model_check <- multinom(treatment ~ Age + size.cm.3, data = data, trace = FALSE)
+summary(model_check)
+```
+
+
+```{r}
+# Try fitting logistic models for each pair to check for warnings
+model_check <- multinom(treatment ~ Age + size.cm.3, data = data, trace = FALSE)
+summary(model_check)
+
+```
+

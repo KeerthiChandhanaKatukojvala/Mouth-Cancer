@@ -1,0 +1,99 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+# Load necessary libraries
+library(nnet)         # For multinom
+library(caret)        # For train/test split and evaluation
+library(readr)        # For read_csv
+library(dplyr)        # For data manipulation
+
+# Load dataset
+df <- read.csv("C:\\Users\\HP\\Downloads\\finally final dataset1.csv")
+
+# View column names and structure
+#str(df)
+
+# Convert treatment to factor
+x <- as.factor(df$treatment)
+
+# Optional: Drop treatment indicator columns to avoid leakage
+df <- df %>% select(-chemotherapy, -radiation, -surgery)
+
+# Handle missing values (optional - depending on your dataset)
+df[is.na(df)] <- 0
+
+# Split into train and test```{r}
+# Load necessary libraries
+library(nnet)         # For multinom
+library(caret)        # For train/test split and evaluation
+library(readr)        # For read_csv
+library(dplyr)        # For data manipulation
+
+# Load dataset
+df <- read.csv("C:\\Users\\HP\\Downloads\\final dataset ameya keerthi 1.csv")
+
+# Convert treatment to factor (target variable)
+df$treatment <- as.factor(df$treatment)
+
+# Optional: Drop indicator columns to avoid leakage
+df <- df %>% select(-chemotherapy, -radiation, -surgery)
+
+# Handle missing values
+df[is.na(df)] <- 0
+
+# Split into train and test
+set.seed(123)
+trainIndex <- createDataPartition(df$treatment, p = 0.8, list = FALSE)
+trainData <- df[trainIndex, ]
+testData <- df[-trainIndex, ]
+
+# Fit multinomial logistic regression
+model <- multinom(treatment ~ ., data = trainData)
+
+# Summary of the model
+summary(model)
+
+# Predict on test data
+predictions <- predict(model, newdata = testData)
+
+# Confusion matrix
+conf_mat <- confusionMatrix(predictions, testData$treatment)
+print(conf_mat)
+
+# Optional: View variable importance
+importance <- varImp(model)
+print(importance)
+
+set.seed(123)
+trainIndex <- createDataPartition(x, p = 0.8, list = FALSE)
+trainData <- df[trainIndex, ]
+testData <- df[-trainIndex, ]
+
+# Fit multinomial logistic regression
+model <- multinom(treatment ~ ., data = trainData)
+
+# Summary of the model
+summary(model)
+
+# Predict on test data
+predictions <- predict(model, newdata = testData)
+
+# Confusion matrix
+conf_mat <- confusionMatrix(predictions, testData$treatment)
+print(conf_mat)
+
+# Optional: View variable importance
+importance <- varImp(model)
+print(importance)
+
+step(model)
+
+```
+

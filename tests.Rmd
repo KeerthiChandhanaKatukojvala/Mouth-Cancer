@@ -1,0 +1,50 @@
+ TESTS
+```{r}
+
+df <- read.csv("C:\\Users\\HP\\Downloads\\final dataset ameya keerthi.csv")
+
+head(df)
+
+#CHEMO
+df$Stage <- as.factor(df$Stage)
+df$chemotherapy <- as.factor(df$chemotherapy)
+table_stage_chemo <- table(df$Stage, df$chemotherapy)
+
+
+chisq.test(table_stage_chemo)
+
+#RADIATION
+df$Stage <- as.factor(df$Stage)
+df$radiation <- as.factor(df$radiation)
+table_stage_radiation <- table(df$Stage, df$radiation)
+
+
+chisq.test(table_stage_radiation)
+
+#SURGERY
+df$Stage <- as.factor(df$Stage)
+df$surgery <- as.factor(df$surgery)
+table_stage_surgery <- table(df$Stage, df$surgery)
+
+
+chisq.test(table_stage_surgery)
+
+```
+CORRELATION BETWEEN STAGE AND SIZE
+
+```{r}
+df <- read.csv("C:\\Users\\HP\\Downloads\\final dataset ameya keerthi.csv")
+
+colnames(df)
+
+
+df$stage_numeric <- as.numeric(factor(df$Stage))
+
+df_corr <- df[!is.na(df$stage_numeric) & !is.na(df$size.cm.3), ]
+
+
+correlation <- cor(df_corr$stage_numeric, df_corr$size.cm.3, method = "pearson")
+print(paste("Correlation between stage and size: ", round(correlation, 3)))
+
+```
+ 
